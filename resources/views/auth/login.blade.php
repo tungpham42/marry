@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Đăng nhập')
+
 @section('content')
 <div class="flex min-h-[calc(100vh-10rem)] flex-col justify-center py-12 sm:px-6 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">

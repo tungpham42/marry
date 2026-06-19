@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Hồ Sơ Nhân Sự')
+
 @section('content')
 <div x-data="{
         showAddModal: false,

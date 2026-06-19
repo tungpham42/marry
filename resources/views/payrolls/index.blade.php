@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Bảng Tổng Hợp Lương')
+
 @section('content')
 <div class="bg-white rounded-3xl shadow-xl shadow-stone-200/40 p-6 lg:p-8 border border-stone-100 animate-fade-in-up">
 

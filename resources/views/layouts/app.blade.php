@@ -13,7 +13,7 @@
 
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="@yield('og_type', 'website')">
-    <meta property="og:title" content="@yield('site_name', 'Studio Manager Pro')">
+    <meta property="og:title" content="@yield('title') | @yield('site_name', 'Studio Manager Pro')">
     <meta property="og:description" content="@yield('meta_description', 'Studio Manager Pro - Wedding Planner')">
     <meta property="og:image" content="@yield('og_image', asset('img/og_image.jpg'))">
     <meta property="og:image:width" content="1200">
