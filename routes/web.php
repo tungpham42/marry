@@ -6,6 +6,7 @@ use App\Http\Controllers\PackageController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DeductionController;
 use App\Http\Controllers\PayrollController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Auth\AuthController; // Controller xử lý logic Auth
 
 // 1. Trang chủ công khai (hoặc có thể chuyển hướng tùy bạn)
@@ -50,4 +51,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('payrolls', [PayrollController::class, 'index'])->name('payrolls.index');
     Route::post('payrolls/generate', [PayrollController::class, 'generate'])->name('payrolls.generate');
     Route::patch('/payrolls/{payroll}/status', [PayrollController::class, 'updateStatus'])->name('payrolls.status');
+
+    // Quản lý Vai trò Nhân sự
+    Route::resource('roles', RoleController::class)->except(['create', 'show', 'edit']);
 });

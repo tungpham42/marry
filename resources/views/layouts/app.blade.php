@@ -101,6 +101,7 @@
                         <a href="{{ route('bookings.index') }}" class="text-slate-600 hover:text-slate-900 hover:bg-white px-4 py-1.5 rounded-full text-sm font-bold transition-all shadow-sm shadow-transparent hover:shadow-slate-200/50">Lịch Chụp</a>
                         <a href="{{ route('packages.index') }}" class="text-slate-600 hover:text-slate-900 hover:bg-white px-4 py-1.5 rounded-full text-sm font-bold transition-all shadow-sm shadow-transparent hover:shadow-slate-200/50">Gói Chụp</a>
                         <a href="{{ route('employees.index') }}" class="text-slate-600 hover:text-slate-900 hover:bg-white px-4 py-1.5 rounded-full text-sm font-bold transition-all shadow-sm shadow-transparent hover:shadow-slate-200/50">Nhân Sự</a>
+                        <a href="{{ route('roles.index') }}" class="text-slate-600 hover:text-slate-900 hover:bg-white px-4 py-1.5 rounded-full text-sm font-bold transition-all shadow-sm shadow-transparent hover:shadow-slate-200/50">Vai Trò</a>
                         <a href="{{ route('deductions.index') }}" class="text-slate-600 hover:text-slate-900 hover:bg-white px-4 py-1.5 rounded-full text-sm font-bold transition-all shadow-sm shadow-transparent hover:shadow-slate-200/50">Phạt/Lỗi</a>
                         <a href="{{ route('payrolls.index') }}" class="ml-1 relative group overflow-hidden bg-slate-900 text-white px-5 py-1.5 rounded-full text-sm font-bold shadow-md hover:scale-105 transition-all">
                             <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-emerald-500 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -165,6 +166,7 @@
                     <a href="{{ route('bookings.index') }}" class="block rounded-2xl px-4 py-3 text-base font-bold text-slate-700 hover:bg-slate-50 transition">Lịch Chụp & Điều Phối</a>
                     <a href="{{ route('packages.index') }}" class="block rounded-2xl px-4 py-3 text-base font-bold text-slate-700 hover:bg-slate-50 transition">Gói Chụp</a>
                     <a href="{{ route('employees.index') }}" class="block rounded-2xl px-4 py-3 text-base font-bold text-slate-700 hover:bg-slate-50 transition">Nhân Sự</a>
+                    <a href="{{ route('roles.index') }}" class="block rounded-2xl px-4 py-3 text-base font-bold text-slate-700 hover:bg-slate-50 transition">Vai Trò</a>
                     <a href="{{ route('deductions.index') }}" class="block rounded-2xl px-4 py-3 text-base font-bold text-slate-700 hover:bg-slate-50 transition">Quản Lý Phạt</a>
                     <a href="{{ route('payrolls.index') }}" class="block rounded-2xl px-4 py-3 text-base font-bold bg-slate-900 text-white text-center shadow-lg shadow-slate-900/20 mt-2">Chốt Lương</a>
 

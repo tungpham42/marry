@@ -189,11 +189,9 @@
                                                 <label class="block text-sm font-bold text-stone-700 mb-1.5">Vai trò thực tế</label>
                                                 <input list="roles-{{ $booking->id }}" name="assigned_role" required placeholder="Gõ hoặc chọn..." class="w-full border-stone-200 rounded-xl py-2.5 px-3 focus:ring-rose-500 focus:border-rose-500 text-sm font-medium bg-stone-50 focus:bg-white transition">
                                                 <datalist id="roles-{{ $booking->id }}">
-                                                    <option value="Thợ chính">
-                                                    <option value="Thợ phụ">
-                                                    <option value="Quay phim">
-                                                    <option value="M.U.A">
-                                                    <option value="Trợ lý">
+                                                    @foreach($roles as $role)
+                                                        <option value="{{ $role->name }}">
+                                                    @endforeach
                                                 </datalist>
                                                 <p class="text-[11px] text-stone-400 mt-2 font-medium leading-tight">* Hệ thống sẽ tự động bốc số ngày công định mức từ gói chụp tương ứng.</p>
                                             </div>

@@ -155,11 +155,10 @@
                         <div class="w-full sm:w-1/2">
                             <label class="block text-sm font-bold text-stone-700 mb-1.5">Vai trò chính <span class="text-rose-500">*</span></label>
                             <select name="primary_role" required class="w-full border-stone-200 rounded-xl p-3 bg-stone-50 focus:bg-white focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition font-medium text-stone-800">
-                                <option value="Thợ chính">Thợ chính</option>
-                                <option value="Thợ phụ">Thợ phụ</option>
-                                <option value="Quay phim">Quay phim</option>
-                                <option value="M.U.A">M.U.A (Makeup)</option>
-                                <option value="Trợ lý">Trợ lý / Assistant</option>
+                                <option value="">-- Chọn vai trò --</option>
+                                @foreach($roles as $role)
+                                    <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="w-full sm:w-1/2">
@@ -231,11 +230,10 @@
                         <div class="w-full sm:w-1/2">
                             <label class="block text-sm font-bold text-stone-700 mb-1.5">Vai trò chính <span class="text-rose-500">*</span></label>
                             <select name="primary_role" x-model="emp.primary_role" required class="w-full border-stone-200 rounded-xl p-3 bg-stone-50 focus:bg-white focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition font-medium text-stone-800">
-                                <option value="Thợ chính">Thợ chính</option>
-                                <option value="Thợ phụ">Thợ phụ</option>
-                                <option value="Quay phim">Quay phim</option>
-                                <option value="M.U.A">M.U.A</option>
-                                <option value="Trợ lý">Trợ lý / Assistant</option>
+                                <option value="">-- Chọn vai trò --</option>
+                                @foreach($roles as $role)
+                                    <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="w-full sm:w-1/2">

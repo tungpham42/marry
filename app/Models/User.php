@@ -31,4 +31,5 @@ class User extends Authenticatable
     public function packages(): HasMany { return $this->hasMany(Package::class); }
     public function packageRoleWages(): HasMany { return $this->hasMany(PackageRoleWage::class); }
     public function payrolls(): HasMany { return $this->hasMany(Payroll::class); }
+    public function roles(): HasMany { return $this->hasMany(Role::class); }
 }

@@ -11,7 +11,9 @@ class EmployeeController extends Controller
     public function index()
     {
         $employees = auth()->user()->employees()->orderBy('id', 'desc')->get();
-        return view('employees.index', compact('employees'));
+        $roles = auth()->user()->roles()->orderBy('name')->get(); // <--- Lấy thêm roles
+
+        return view('employees.index', compact('employees', 'roles')); // <--- Truyền vào view
     }
 
     public function store(Request $request)

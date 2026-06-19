@@ -11,12 +11,16 @@ use Illuminate\Validation\Rule;
 class BookingController extends Controller
 {
     public function index() {
-        // Chỉ lấy lịch chụp, gói chụp và nhân viên thuộc về user đang đăng nhập
+        // Lấy lịch chụp, gói chụp và nhân viên
         $bookings = auth()->user()->bookings()->with(['package', 'employees'])->orderBy('shoot_date', 'desc')->get();
         $packages = auth()->user()->packages()->get();
         $employees = auth()->user()->employees()->where('status', 'active')->get();
 
-        return view('bookings.index', compact('bookings', 'packages', 'employees'));
+        // Thêm dòng này để lấy danh sách Vai trò động
+        $roles = auth()->user()->roles()->orderBy('name')->get();
+
+        // Truyền thêm biến $roles sang view
+        return view('bookings.index', compact('bookings', 'packages', 'employees', 'roles'));
     }
 
     public function store(Request $request) {
