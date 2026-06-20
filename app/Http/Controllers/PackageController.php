@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Package;
 use App\Models\PackageRoleWage;
 use Illuminate\Http\Request;
+use App\Traits\AuthorizesTenant;
 
 class PackageController extends Controller
 {
+    use AuthorizesTenant;
+
     public function index() {
-        $packages = auth()->user()->packages()->with('roleWages')->orderBy('id', 'desc')->get();
+        $packages = Package::with('roleWages')->orderBy('id', 'desc')->get();
         return view('packages.index', compact('packages'));
     }
 
@@ -20,13 +23,13 @@ class PackageController extends Controller
             'description' => 'nullable|string'
         ]);
 
-        auth()->user()->packages()->create($validated);
+        Package::create($validated);
 
         return redirect()->back()->with('success', 'Thêm gói chụp thành công!');
     }
 
     public function update(Request $request, Package $package) {
-        abort_if($package->user_id !== auth()->id(), 403);
+        $this->authorizeOwnership($package);
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -40,7 +43,7 @@ class PackageController extends Controller
     }
 
     public function destroy(Package $package) {
-        abort_if($package->user_id !== auth()->id(), 403);
+        $this->authorizeOwnership($package);
 
         $package->delete();
         return redirect()->back()->with('success', 'Đã xóa gói chụp!');
@@ -49,7 +52,7 @@ class PackageController extends Controller
     // --- Cấu hình định mức ngày công ---
 
     public function storeWage(Request $request, Package $package) {
-        abort_if($package->user_id !== auth()->id(), 403);
+        $this->authorizeOwnership($package);
 
         $request->validate([
             'role' => 'required|string',
@@ -69,7 +72,7 @@ class PackageController extends Controller
     }
 
     public function destroyWage(PackageRoleWage $wage) {
-        abort_if($wage->user_id !== auth()->id(), 403);
+        $this->authorizeOwnership($wage);
 
         $wage->delete();
         return redirect()->back()->with('success', 'Đã xóa định mức!');

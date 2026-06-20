@@ -34,6 +34,21 @@
                 </div>
 
                 <div>
+                    <label for="subdomain" class="block text-sm font-bold text-stone-700 mb-1.5">Tên miền Studio của bạn</label>
+                    <div class="mt-1 flex rounded-xl shadow-sm">
+                        <input id="subdomain" name="subdomain" type="text" required value="{{ old('subdomain') }}"
+                            class="block w-full rounded-l-xl border-stone-200 bg-stone-50 py-3 px-4 text-stone-800 focus:bg-white focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20 transition font-medium"
+                            placeholder="ví dụ: tung">
+                        <span class="inline-flex items-center rounded-r-xl border border-l-0 border-stone-200 bg-stone-100 px-4 text-stone-500 font-bold text-sm">
+                            .marry.io.vn
+                        </span>
+                    </div>
+                    @error('subdomain')
+                        <p class="text-rose-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
                     <label for="password" class="block text-sm font-bold text-stone-700 mb-1.5">Mật khẩu</label>
                     <div class="mt-1">
                         <input id="password" name="password" type="password" autocomplete="new-password" required

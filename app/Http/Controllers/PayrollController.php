@@ -5,17 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\Employee;
 use App\Models\Payroll;
 use Illuminate\Http\Request;
+use App\Traits\AuthorizesTenant;
 
 class PayrollController extends Controller
 {
+    use AuthorizesTenant;
+
     public function index(Request $request)
     {
         $month = $request->has('month') ? (int)$request->input('month') : (int)date('m');
         $year = $request->has('year') ? (int)$request->input('year') : (int)date('Y');
 
         // Chỉ tải bảng lương thuộc về User hiện tại
-        $payrolls = auth()->user()->payrolls()
-                           ->with('employee')
+        $payrolls = Payroll::with('employee')
                            ->where('month', $month)
                            ->where('year', $year)
                            ->get();
@@ -39,7 +41,7 @@ class PayrollController extends Controller
         $year = $request->year;
 
         // Chỉ tính toán trên danh sách nhân sự thuộc về Studio của User này
-        $employees = auth()->user()->employees()->with([
+        $employees = Employee::with([
             'bookings' => function($query) use ($month, $year) {
                 $query->whereMonth('shoot_date', $month)
                       ->whereYear('shoot_date', $year)
@@ -88,20 +90,16 @@ class PayrollController extends Controller
 
     public function updateStatus(Request $request, Payroll $payroll)
     {
-        // 1. Kiểm tra bảo mật: Chỉ cho phép chủ studio (User) sở hữu bản ghi này được sửa
-        abort_if($payroll->user_id !== auth()->id(), 403);
+        $this->authorizeOwnership($payroll);
 
-        // 2. Validate dữ liệu đầu vào
         $request->validate([
             'status' => 'required|in:draft,approved,paid'
         ]);
 
-        // 3. Cập nhật trạng thái
         $payroll->update([
             'status' => $request->status
         ]);
 
-        // Trả về thông báo thành công
         $statusText = match($request->status) {
             'paid' => 'Đã chi trả',
             'approved' => 'Đã duyệt',

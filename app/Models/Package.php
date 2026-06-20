@@ -3,15 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\BelongsToTenant;
 
 class Package extends Model
 {
-    protected $guarded = [];
+    use BelongsToTenant;
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    protected $guarded = [];
 
     // Cấu hình mức ngày công cho từng vai trò trong gói này
     public function roleWages()

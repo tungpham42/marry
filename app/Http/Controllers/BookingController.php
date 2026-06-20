@@ -5,19 +5,23 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Package;
 use App\Models\Employee;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Traits\AuthorizesTenant;
 
 class BookingController extends Controller
 {
+    use AuthorizesTenant;
+
     public function index() {
         // Lấy lịch chụp, gói chụp và nhân viên
-        $bookings = auth()->user()->bookings()->with(['package', 'employees'])->orderBy('shoot_date', 'desc')->get();
-        $packages = auth()->user()->packages()->get();
-        $employees = auth()->user()->employees()->where('status', 'active')->get();
+        $bookings = Booking::with(['package', 'employees'])->orderBy('shoot_date', 'desc')->get();
+        $packages = Package::get();
+        $employees = Employee::where('status', 'active')->get();
 
         // Thêm dòng này để lấy danh sách Vai trò động
-        $roles = auth()->user()->roles()->orderBy('name')->get();
+        $roles = Role::orderBy('name')->get();
 
         // Truyền thêm biến $roles sang view
         return view('bookings.index', compact('bookings', 'packages', 'employees', 'roles'));
@@ -35,14 +39,13 @@ class BookingController extends Controller
             'status' => 'nullable|string'
         ]);
 
-        auth()->user()->bookings()->create($validated);
+        Booking::create($validated);
 
         return redirect()->back()->with('success', 'Tạo lịch chụp thành công!');
     }
 
     public function update(Request $request, Booking $booking) {
-        // Chống hack: Đảm bảo bản ghi này thuộc về user đang đăng nhập
-        abort_if($booking->user_id !== auth()->id(), 403, 'Hành động không hợp lệ.');
+        $this->authorizeOwnership($booking);
 
         $validated = $request->validate([
             'customer_name' => 'required|string|max:255',
@@ -60,18 +63,18 @@ class BookingController extends Controller
     }
 
     public function destroy(Booking $booking) {
-        abort_if($booking->user_id !== auth()->id(), 403, 'Hành động không hợp lệ.');
+        $this->authorizeOwnership($booking);
 
         $booking->delete();
         return redirect()->back()->with('success', 'Đã xóa lịch chụp!');
     }
 
     // ==========================================
-    // QUẢN LÝ Ê-KÍP VÀ CHẤM CÔNG (LOGIC ĐÃ FIX)
+    // QUẢN LÝ Ê-KÍP VÀ CHẤM CÔNG
     // ==========================================
 
     public function assignCrew(Request $request, Booking $booking) {
-        abort_if($booking->user_id !== auth()->id(), 403, 'Hành động không hợp lệ.');
+        $this->authorizeOwnership($booking);
 
         $request->validate([
             'employee_id' => [
@@ -97,8 +100,8 @@ class BookingController extends Controller
     }
 
     public function updateTimesheet(Request $request, Booking $booking, Employee $employee) {
-        abort_if($booking->user_id !== auth()->id(), 403);
-        abort_if($employee->user_id !== auth()->id(), 403);
+        $this->authorizeOwnership($booking);
+        $this->authorizeOwnership($employee);
 
         $request->validate([
             'ot_hours' => 'nullable|numeric|min:0',
@@ -120,8 +123,8 @@ class BookingController extends Controller
     }
 
     public function removeCrew(Booking $booking, Employee $employee) {
-        abort_if($booking->user_id !== auth()->id(), 403);
-        abort_if($employee->user_id !== auth()->id(), 403);
+        $this->authorizeOwnership($booking);
+        $this->authorizeOwnership($employee);
 
         $booking->employees()->detach($employee->id);
 

@@ -3,19 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\BelongsToTenant;
 
 class Booking extends Model
 {
+    use BelongsToTenant;
+
     protected $guarded = [];
 
     protected $casts = [
         'shoot_date' => 'date',
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 
     public function package()
     {

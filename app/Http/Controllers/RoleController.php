@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use Illuminate\Http\Request;
+use App\Traits\AuthorizesTenant;
 
 class RoleController extends Controller
 {
+    use AuthorizesTenant;
+
     public function index()
     {
-        $roles = auth()->user()->roles()->orderBy('id', 'desc')->get();
+        $roles = Role::orderBy('id', 'desc')->get();
         return view('roles.index', compact('roles'));
     }
 
@@ -19,13 +22,13 @@ class RoleController extends Controller
             'name' => 'required|string|max:255'
         ]);
 
-        auth()->user()->roles()->create($validated);
+        Role::create($validated);
         return redirect()->back()->with('success', 'Đã thêm vai trò mới!');
     }
 
     public function update(Request $request, Role $role)
     {
-        abort_if($role->user_id !== auth()->id(), 403);
+        $this->authorizeOwnership($role);
 
         $validated = $request->validate([
             'name' => 'required|string|max:255'
@@ -37,7 +40,7 @@ class RoleController extends Controller
 
     public function destroy(Role $role)
     {
-        abort_if($role->user_id !== auth()->id(), 403);
+        $this->authorizeOwnership($role);
 
         $role->delete();
         return redirect()->back()->with('success', 'Đã xóa vai trò khỏi hệ thống!');

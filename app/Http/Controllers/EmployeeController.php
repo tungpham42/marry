@@ -3,24 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Traits\AuthorizesTenant;
 
 class EmployeeController extends Controller
 {
+    use AuthorizesTenant;
+
     public function index()
     {
-        $employees = auth()->user()->employees()->orderBy('id', 'desc')->get();
-        $roles = auth()->user()->roles()->orderBy('name')->get(); // <--- Lấy thêm roles
+        $employees = Employee::orderBy('id', 'desc')->get();
+        $roles = Role::orderBy('name')->get();
 
-        return view('employees.index', compact('employees', 'roles')); // <--- Truyền vào view
+        return view('employees.index', compact('employees', 'roles'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            // Email chỉ duy nhất trong phạm vi của studio (User) này quản lý
             'email' => [
                 'nullable',
                 'email',
@@ -32,13 +35,13 @@ class EmployeeController extends Controller
             'status' => 'required|in:active,inactive'
         ]);
 
-        auth()->user()->employees()->create($validated);
+        Employee::create($validated);
         return redirect()->back()->with('success', 'Đã thêm nhân viên thành công!');
     }
 
     public function update(Request $request, Employee $employee)
     {
-        abort_if($employee->user_id !== auth()->id(), 403);
+        $this->authorizeOwnership($employee);
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -59,7 +62,7 @@ class EmployeeController extends Controller
 
     public function destroy(Employee $employee)
     {
-        abort_if($employee->user_id !== auth()->id(), 403);
+        $this->authorizeOwnership($employee);
 
         $employee->delete();
         return redirect()->back()->with('success', 'Đã xóa nhân viên khỏi hệ thống!');

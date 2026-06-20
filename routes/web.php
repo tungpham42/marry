@@ -28,7 +28,7 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout')->middle
 
 
 // 3. Hệ Thống Quản Lý Nội Bộ (Bắt buộc ĐÃ ĐĂNG NHẬP)
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'tenant.subdomain'])->group(function () {
 
     // Quản lý Nhân sự
     Route::resource('employees', EmployeeController::class)->except(['create', 'show', 'edit']);

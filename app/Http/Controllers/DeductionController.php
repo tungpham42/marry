@@ -7,15 +7,18 @@ use App\Models\Employee;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Traits\AuthorizesTenant;
 
 class DeductionController extends Controller
 {
+    use AuthorizesTenant;
+
     public function index()
     {
         // Lọc toàn bộ dữ liệu theo User đang đăng nhập
-        $deductions = auth()->user()->deductions()->with(['employee', 'booking'])->orderBy('date', 'desc')->get();
-        $employees = auth()->user()->employees()->where('status', 'active')->get();
-        $bookings = auth()->user()->bookings()->orderBy('shoot_date', 'desc')->limit(50)->get();
+        $deductions = Deduction::with(['employee', 'booking'])->orderBy('date', 'desc')->get();
+        $employees = Employee::where('status', 'active')->get();
+        $bookings = Booking::orderBy('shoot_date', 'desc')->limit(50)->get();
 
         return view('deductions.index', compact('deductions', 'employees', 'bookings'));
     }
@@ -37,14 +40,14 @@ class DeductionController extends Controller
         ]);
 
         // Tạo thông qua quan hệ để tự động gán user_id
-        auth()->user()->deductions()->create($validated);
+        Deduction::create($validated);
 
         return redirect()->back()->with('success', 'Đã ghi nhận khoản khấu trừ/phạt!');
     }
 
     public function update(Request $request, Deduction $deduction)
     {
-        abort_if($deduction->user_id !== auth()->id(), 403);
+        $this->authorizeOwnership($deduction);
 
         $validated = $request->validate([
             'employee_id' => [
@@ -67,7 +70,7 @@ class DeductionController extends Controller
 
     public function destroy(Deduction $deduction)
     {
-        abort_if($deduction->user_id !== auth()->id(), 403);
+        $this->authorizeOwnership($deduction);
 
         $deduction->delete();
         return redirect()->back()->with('success', 'Đã xóa bản ghi khấu trừ!');

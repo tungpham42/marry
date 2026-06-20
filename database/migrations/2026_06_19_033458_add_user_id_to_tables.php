@@ -37,22 +37,22 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('bookings', function (Blueprint $table) {
-            $table->$table->dropColumn('user_id');
+            $table->dropColumn('user_id');
         });
         Schema::table('deductions', function (Blueprint $table) {
-            $table->$table->dropColumn('user_id');
+            $table->dropColumn('user_id');
         });
         Schema::table('employees', function (Blueprint $table) {
-            $table->$table->dropColumn('user_id');
+            $table->dropColumn('user_id');
         });
         Schema::table('packages', function (Blueprint $table) {
-            $table->$table->dropColumn('user_id');
+            $table->dropColumn('user_id');
         });
         Schema::table('package_role_wages', function (Blueprint $table) {
-            $table->$table->dropColumn('user_id');
+            $table->dropColumn('user_id');
         });
         Schema::table('payrolls', function (Blueprint $table) {
-            $table->$table->dropColumn('user_id');
+            $table->dropColumn('user_id');
         });
     }
 };
