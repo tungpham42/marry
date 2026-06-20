@@ -115,8 +115,9 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        // Quay về trang login kèm thông báo
-        return redirect()->route('login')
+        // Quay về trang login CỦA TÊN MIỀN CHÍNH kèm thông báo
+        // Thay 'marry.io.vn' bằng domain chính xác của bạn nếu cần
+        return redirect()->to('https://marry.io.vn/login')
             ->with('success', 'Bạn đã đăng xuất khỏi hệ thống an toàn.');
     }
 }
